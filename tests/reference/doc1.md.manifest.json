@@ -1,0 +1,18 @@
+{
+    "metadataAttributes": {
+        "title": {
+            "includeForEmbedding": true,
+            "value": {
+                "stringValue": "Section A",
+                "type": "STRING"
+            }
+        },
+        "x-amz-bedrock-kb-source-uri": {
+            "includeForEmbedding": true,
+            "value": {
+                "stringValue": "/path/to/site_root/doc1.html",
+                "type": "STRING"
+            }
+        }
+    }
+}

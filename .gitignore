@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.coverage
+
+# Macos
+.DS_Store
+
+# Virtual environments
+.venv
+
+# Vim swap files
+*.swp
+
+# Build projects from sphinx tests
+_build/
