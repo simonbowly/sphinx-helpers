@@ -111,7 +111,9 @@ class Rewriter(docutils.nodes.NodeVisitor):
 
     def depart_entry(self, node):
         # Render on departure so any Rewriter transforms are done first
-        self._table.add_entry(self._renderer.render(node.children))
+        content = self._renderer.render(node.children)
+        content = content.strip().replace("\n", " ")
+        self._table.add_entry(content)
 
     def depart_table(self, node):
         self._table.close_table()
