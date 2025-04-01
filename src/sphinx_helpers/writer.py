@@ -86,8 +86,10 @@ class Rewriter(docutils.nodes.NodeVisitor):
         node.replace_self(nodes.Text(f"${node.astext()}$"))
 
     def visit_math_block(self, node):
-        content = self._renderer.render([node])
-        node.replace_self(nodes.raw("", f"$$\n{content}\n$$", format="text"))
+        # Note: don't use the renderer unless you are replacing the parent ...
+        content = node.astext()
+        new_node = nodes.raw("", f"$$\n{content}\n$$", format="text")
+        node.replace_self(new_node)
 
     def visit_section(self, node):
         self._current_level += 1
