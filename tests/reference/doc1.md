@@ -4,7 +4,9 @@ Here is some math, $y = \min{mx} + c$, and some text after the math.
 
 And a math block
 
-   y = \max(a, b)
+$$
+y = \max(a, b)
+$$
 
 in the middle of a paragraph.
 
