@@ -119,6 +119,16 @@ class Rewriter(docutils.nodes.NodeVisitor):
         self._table.close_table()
         node.replace_self(nodes.raw("", self._table.render(), format="text"))
 
+    def visit_literal_block(self, node):
+        language = node.attributes.get("language", None)
+        if language is None:
+            language = ""
+        code = node.astext()
+        content = f"```{language}\n{code}\n```"
+        node.replace_self(
+            nodes.raw("", content, format="text"),
+        )
+
     def unknown_visit(self, node):
         pass
 

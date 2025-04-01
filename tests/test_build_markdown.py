@@ -32,7 +32,7 @@ def test_markdown_only(app, status, warning):
     assert_not_exists(output_dir.joinpath("doc1.html"))
     assert_not_exists(output_dir.joinpath("doc1.txt"))
 
-    for file_path in ["doc1.md"]:
+    for file_path in ["doc1.md", "code.md"]:
         content = output_dir.joinpath(file_path).read_text()
         expected_content = reference_dir.joinpath(file_path).read_text()
         assert content == expected_content

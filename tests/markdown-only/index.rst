@@ -1,1 +1,7 @@
-../source/index.rst
+My Project
+==========
+
+.. toctree::
+
+   doc1
+   code
