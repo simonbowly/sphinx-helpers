@@ -1,5 +1,6 @@
 """Test the build process with Text builder with the test root."""
 
+import json
 import pathlib
 import shutil
 
@@ -32,10 +33,8 @@ def test_markdown_only(app, status, warning):
     assert_not_exists(output_dir.joinpath("doc1.txt"))
 
     for file_path in ["doc1.md"]:
-
         content = output_dir.joinpath(file_path).read_text()
         expected_content = reference_dir.joinpath(file_path).read_text()
-
         assert content == expected_content
 
 
@@ -53,9 +52,12 @@ def test_markdown_with_manifest(app, status, warning):
     assert_not_exists(output_dir.joinpath("doc1.html"))
     assert_not_exists(output_dir.joinpath("doc1.txt"))
 
-    for file_path in ["doc1.md", "doc1.md.manifest.json"]:
-
+    for file_path in ["doc1.md"]:
         content = output_dir.joinpath(file_path).read_text()
         expected_content = reference_dir.joinpath(file_path).read_text()
+        assert content == expected_content
 
+    for file_path in ["doc1.md.manifest.json"]:
+        content = json.loads(output_dir.joinpath(file_path).read_text())
+        expected_content = json.loads(reference_dir.joinpath(file_path).read_text())
         assert content == expected_content
