@@ -14,7 +14,7 @@ Here’s a link to something.
 
 ### Section A.1.1
 
-Text in A.1.1
+There is a table in this section.
 
 | Formatted     | Math             | Plain           |
 |---------------|------------------|-----------------|
@@ -27,4 +27,9 @@ Text in A.2
 
 ### Section A.2.1
 
-Text in A.2.1
+There is a wide table in this section
+
+| Short         | Long                                                                                             |
+|---------------|--------------------------------------------------------------------------------------------------|
+| Short version | Really really really really really really really really really really really really long version |
+| Short version | Not quite so long version, but still a bit over the top                                          |

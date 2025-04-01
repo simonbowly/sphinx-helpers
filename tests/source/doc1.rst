@@ -19,11 +19,11 @@ Here's `a link <http://hi.me>`_ to something.
 Section A.1.1
 ^^^^^^^^^^^^^
 
-Text in A.1.1
+There is a table in this section.
 
 .. _my_list_table:
 
-.. list-table:: Operations in nonlinear constraints
+.. list-table:: Table title
    :widths: 25 33 25
    :header-rows: 1
 
@@ -47,4 +47,15 @@ Text in A.2
 Section A.2.1
 ^^^^^^^^^^^^^
 
-Text in A.2.1
+There is a wide table in this section
+
+.. list-table:: Wide table title
+   :header-rows: 1
+
+   * - Short
+     - Long
+   * - Short version
+     - Really really really really really really really really really
+       really really really long version
+   * - Short version
+     - Not quite so long version, but still a bit over the top
