@@ -11,8 +11,13 @@ class SimpleMarkdownBuilder(TextBuilder):
     """Simple markdown builder. Piggy-backs on the text builder by rewriting
     some parts of the doctree before the build."""
 
+    # These are used by the parent class implementation of builder methods
+    # - 'name' sets the output directory
+    # - 'out_suffix' sets the file extension (added to {outdir}/{docname})
+    # - 'format' should stay as set by the parent (in this case, 'text') as
+    #   it affects custom node type registration for builders and translators
+
     name = "markdown"
-    format = "markdown"
     out_suffix = ".md"
 
     def __init__(self, app, env):
