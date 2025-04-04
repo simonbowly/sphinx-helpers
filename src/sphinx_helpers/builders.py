@@ -3,8 +3,22 @@ import pathlib
 
 import docutils.nodes
 from sphinx.builders.text import TextBuilder
+from sphinx.writers.text import TextTranslator
+from sphinx.util.logging import getLogger
 
 from .writer import Rewriter, TextRenderer
+
+logger = getLogger(__name__)
+
+
+class FallbackTextTranslator(TextTranslator):
+    def unknown_visit(self, node):
+        # Ignore unknown nodes
+        logger.warning("Skip unknown node: %s", node.__class__.__name__)
+
+    def unknown_departure(self, node):
+        # Ignore unknown nodes
+        pass
 
 
 class SimpleMarkdownBuilder(TextBuilder):
@@ -19,6 +33,7 @@ class SimpleMarkdownBuilder(TextBuilder):
 
     name = "markdown"
     out_suffix = ".md"
+    default_translator_class = FallbackTextTranslator
 
     def __init__(self, app, env):
         super().__init__(app, env)
