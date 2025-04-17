@@ -75,12 +75,18 @@ class Table:
 
 class Rewriter(docutils.nodes.NodeVisitor):
 
-    def __init__(self, *args, text_renderer, **kwargs):
+    def __init__(self, *args, text_renderer, header=None, **kwargs):
         super().__init__(*args, **kwargs)
         self._current_level = 0
         self._renderer = text_renderer
         self._table = None
         self._desc_level = 0
+        self._header = header
+
+    def depart_document(self, node):
+        if self._header:
+            new_node = nodes.raw("", self._header, format="text")
+            node.insert(0, new_node)
 
     def visit_math(self, node):
         node.replace_self(nodes.Text(f"${node.astext()}$"))

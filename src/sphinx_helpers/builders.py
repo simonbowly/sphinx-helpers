@@ -2,9 +2,10 @@ import json
 import pathlib
 
 import docutils.nodes
+import yaml
 from sphinx.builders.text import TextBuilder
-from sphinx.writers.text import TextTranslator
 from sphinx.util.logging import getLogger
+from sphinx.writers.text import TextTranslator
 
 from .writer import Rewriter, TextRenderer
 
@@ -38,17 +39,38 @@ class SimpleMarkdownBuilder(TextBuilder):
     def __init__(self, app, env):
         super().__init__(app, env)
         self.text_renderer = TextRenderer(app, env)
+        self._include_header = app.config.markdown_include_header
 
     def init(self):
         super().init()
         self.text_renderer.init()
+
+    def get_header_data(self, docname, doctree):
+        title_node = doctree.next_node(docutils.nodes.title)
+        title = title_node.astext() if title_node else None
+        url = f"{self._manifest_base_url}/{docname}.md"
+        return dict(title=title, url=url)
+
+    def format_header(self, docname, doctree):
+        header_data = self.get_header_data(docname, doctree)
+        return "".join(
+            [
+                "---\n",
+                yaml.safe_dump(header_data),
+                "---\n",
+            ]
+        )
 
     def prepare_writing(self, docnames):
         super().prepare_writing(docnames)
         self.text_renderer.prepare_writing(docnames)
 
     def write_doc(self, docname, doctree):
-        rewriter = Rewriter(doctree, text_renderer=self.text_renderer)
+        if self._include_header:
+            header = self.format_header(docname, doctree)
+        else:
+            header = None
+        rewriter = Rewriter(doctree, text_renderer=self.text_renderer, header=header)
         doctree.walkabout(rewriter)
         super().write_doc(docname, doctree)
 
