@@ -3,6 +3,7 @@
 import json
 import pathlib
 import shutil
+import textwrap
 
 import pytest
 
@@ -61,3 +62,33 @@ def test_markdown_with_manifest(app, status, warning):
         content = json.loads(output_dir.joinpath(file_path).read_text())
         expected_content = json.loads(reference_dir.joinpath(file_path).read_text())
         assert content == expected_content
+
+
+@pytest.mark.sphinx(buildername="markdown", testroot=here / "markdown-with-header")
+def test_markdown_with_header(app, status, warning):
+    output_dir = pathlib.Path(app.outdir)
+    assert output_dir.parts[-2] == "_build"
+    assert output_dir.parts[-1] == "markdown"
+
+    shutil.rmtree(output_dir.parent, ignore_errors=True)
+    app.build()
+
+    assert_exists(output_dir.joinpath("doc1.md"))
+    assert_not_exists(output_dir.joinpath("doc1.md.manifest.json"))
+    assert_not_exists(output_dir.joinpath("doc1.html"))
+    assert_not_exists(output_dir.joinpath("doc1.txt"))
+
+    file_path = "doc1.md"
+    content = output_dir.joinpath(file_path).read_text()
+    expected_body = reference_dir.joinpath(file_path).read_text()
+    expected_header = textwrap.dedent(
+        """
+        ---
+        title: Section A
+        url: /path/to/site_root/doc1.md
+        ---
+
+        """
+    ).lstrip()
+    expected_content = expected_header + expected_body
+    assert content == expected_content
