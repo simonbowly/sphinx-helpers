@@ -4,4 +4,4 @@ extensions = [
     "sphinx_helpers.ext.markdown",
 ]
 
-markdown_include_manifest = True
+markdown_include_metadata = True

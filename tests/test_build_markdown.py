@@ -29,7 +29,7 @@ def test_markdown_only(app, status, warning):
     app.build()
 
     assert_exists(output_dir.joinpath("doc1.md"))
-    assert_not_exists(output_dir.joinpath("doc1.md.manifest.json"))
+    assert_not_exists(output_dir.joinpath("doc1.md.metadata.json"))
     assert_not_exists(output_dir.joinpath("doc1.html"))
     assert_not_exists(output_dir.joinpath("doc1.txt"))
 
@@ -39,8 +39,8 @@ def test_markdown_only(app, status, warning):
         assert content == expected_content
 
 
-@pytest.mark.sphinx(buildername="markdown", testroot=here / "markdown-with-manifest")
-def test_markdown_with_manifest(app, status, warning):
+@pytest.mark.sphinx(buildername="markdown", testroot=here / "markdown-with-metadata")
+def test_markdown_with_metadata(app, status, warning):
     output_dir = pathlib.Path(app.outdir)
     assert output_dir.parts[-2] == "_build"
     assert output_dir.parts[-1] == "markdown"
@@ -49,7 +49,7 @@ def test_markdown_with_manifest(app, status, warning):
     app.build()
 
     assert_exists(output_dir.joinpath("doc1.md"))
-    assert_exists(output_dir.joinpath("doc1.md.manifest.json"))
+    assert_exists(output_dir.joinpath("doc1.md.metadata.json"))
     assert_not_exists(output_dir.joinpath("doc1.html"))
     assert_not_exists(output_dir.joinpath("doc1.txt"))
 
@@ -58,7 +58,7 @@ def test_markdown_with_manifest(app, status, warning):
         expected_content = reference_dir.joinpath(file_path).read_text()
         assert content == expected_content
 
-    for file_path in ["doc1.md.manifest.json"]:
+    for file_path in ["doc1.md.metadata.json"]:
         content = json.loads(output_dir.joinpath(file_path).read_text())
         expected_content = json.loads(reference_dir.joinpath(file_path).read_text())
         assert content == expected_content
@@ -74,7 +74,7 @@ def test_markdown_with_header(app, status, warning):
     app.build()
 
     assert_exists(output_dir.joinpath("doc1.md"))
-    assert_not_exists(output_dir.joinpath("doc1.md.manifest.json"))
+    assert_not_exists(output_dir.joinpath("doc1.md.metadata.json"))
     assert_not_exists(output_dir.joinpath("doc1.html"))
     assert_not_exists(output_dir.joinpath("doc1.txt"))
 
