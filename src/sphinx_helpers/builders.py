@@ -48,7 +48,7 @@ class SimpleMarkdownBuilder(TextBuilder):
     def get_header_data(self, docname, doctree):
         title_node = doctree.next_node(docutils.nodes.title)
         title = title_node.astext() if title_node else None
-        url = f"{self._manifest_base_url}/{docname}.md"
+        url = f"{self._metadata_base_url}/{docname}.md"
         return dict(title=title, url=url)
 
     def format_header(self, docname, doctree):
@@ -79,13 +79,13 @@ class ManifestMixin:
 
     def __init__(self, app, env):
         super().__init__(app, env)
-        self._manifest_base_url = app.config.html_baseurl.rstrip("/")
-        self._include_manifest = app.config.markdown_include_manifest
+        self._metadata_base_url = app.config.html_baseurl.rstrip("/")
+        self._include_metadata = app.config.markdown_include_metadata
 
-    def create_manifest(self, docname, doctree):
+    def create_metadata(self, docname, doctree):
         title_node = doctree.next_node(docutils.nodes.title)
         title = title_node.astext() if title_node else None
-        url = f"{self._manifest_base_url}/{docname}.html"
+        url = f"{self._metadata_base_url}/{docname}.html"
         return {
             "metadataAttributes": {
                 "title": {
@@ -105,26 +105,26 @@ class ManifestMixin:
             }
         }
 
-    def manifest_target(self, docname):
+    def metadata_target(self, docname):
         outdir = pathlib.Path(self.outdir)
         content_file = outdir / f"{docname}{self.out_suffix}"
-        manifest_file = outdir / f"{docname}{self.out_suffix}.manifest.json"
+        metadata_file = outdir / f"{docname}{self.out_suffix}.metadata.json"
         assert content_file.exists()
-        return manifest_file
+        return metadata_file
 
     def write_doc(self, docname: str, doctree: docutils.nodes.Node) -> None:
         # Before the markdown builder modifies the tree, find the document
-        # title and create the manifest
-        if self._include_manifest:
-            manifest = self.create_manifest(docname, doctree)
+        # title and create the metadata
+        if self._include_metadata:
+            metadata = self.create_metadata(docname, doctree)
 
         # Call the markdown builder to create the content file
         super().write_doc(docname, doctree)
 
-        # Finally, write manifest file
-        if self._include_manifest:
-            with self.manifest_target(docname).open("w") as outfile:
-                json.dump(manifest, outfile, indent=4, sort_keys=True)
+        # Finally, write metadata file
+        if self._include_metadata:
+            with self.metadata_target(docname).open("w") as outfile:
+                json.dump(metadata, outfile, indent=4, sort_keys=True)
 
 
 class MarkdownBuilder(ManifestMixin, SimpleMarkdownBuilder):
