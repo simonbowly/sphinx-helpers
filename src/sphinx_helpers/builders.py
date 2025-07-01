@@ -46,6 +46,7 @@ class SimpleMarkdownBuilder(TextBuilder):
         self.text_renderer.init()
 
     def get_header_data(self, docname, doctree):
+        # FIXME should this also follow ManifestMixin.get_title?
         title_node = doctree.next_node(docutils.nodes.title)
         title = title_node.astext() if title_node else None
         url = f"{self._metadata_base_url}/{docname}.md"
@@ -81,10 +82,18 @@ class ManifestMixin:
         super().__init__(app, env)
         self._metadata_base_url = app.config.html_baseurl.rstrip("/")
         self._include_metadata = app.config.markdown_include_metadata
+        self._use_title_attribute = app.config.metadata_use_title_attribute
+
+    def get_title(self, doctree):
+        meta_title = doctree.attributes.get("title")
+        if meta_title and self._use_title_attribute:
+            return meta_title
+        else:
+            title_node = doctree.next_node(docutils.nodes.title)
+            return title_node.astext() if title_node else None
 
     def create_metadata(self, docname, doctree):
-        title_node = doctree.next_node(docutils.nodes.title)
-        title = title_node.astext() if title_node else None
+        title = self.get_title(doctree)
         url = f"{self._metadata_base_url}/{docname}.html"
         return {
             "metadataAttributes": {
