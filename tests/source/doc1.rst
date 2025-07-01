@@ -1,3 +1,5 @@
+.. title:: Meta Title for Section A
+
 Section A
 =========
 
